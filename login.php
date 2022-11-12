@@ -11,14 +11,16 @@ include("db/connection.php");
             goto END;
         }
         $password = md5($_POST['password']);
-        $stmt = $conn->prepare("SELECT id,email,password,status FROM sign_up WHERE email = ? AND password = ? AND status='1'");  
+        $stmt = $conn->prepare("SELECT id FROM sign_up WHERE email = ? AND password = ? AND status='1'");  
         $stmt->bind_param("ss", $_POST['email'], $password);
         $stmt->execute(); 
-        echo $count;
-            if($count > 0)  
+        $id=$stmt->bind_result($id);
+        $stmt->fetch();
+            if($id > 0)  
             {  
                 session_start();
                 $R['email'] = $_SESSION["email"] = $_POST["email"];  
+                $R['id'] = $id;
                 $R['ERR'] = false;
                 $R['MSG'] = "Sussess";
                 goto END;
