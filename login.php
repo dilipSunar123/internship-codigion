@@ -14,9 +14,9 @@ include("db/connection.php");
         $stmt = $conn->prepare("SELECT id FROM sign_up WHERE email = ? AND password = ? AND status='1'");  
         $stmt->bind_param("ss", $_POST['email'], $password);
         $stmt->execute(); 
-        $id=$stmt->bind_result($id);
+        $count=$stmt->bind_result($id);
         $stmt->fetch();
-            if($id > 0)  
+            if($count > 0)  
             {  
                 $R['email'] = $_POST["email"];  
                 $R['ERR'] = false;
