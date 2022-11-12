@@ -1,35 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Registration</title>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-
-<form method="POST">
-<div class="container">
-  <div class="brand-title">LOGIN</div>
-
-  <div class="inputs">
-    <label>EMAIL</label>
-    <input type="email" placeholder="example@dev.com" name="email" />
-    <label>PASSWORD</label>
-    <input type="password" placeholder="Enter Your Password" name="password" />
-	
-    <button type="submit" name="login">LOGIN</button>
-	</div>
-	
-  <a href="register.php" target= "blank" >Don't  Have An Account</a>
-</form>
-</body>
-</html>
-
 
  <?php  
  
     session_start();
-	include("connection.php");
+	include("db/connection.php");
 	
       if(isset($_POST["login"]))  
       {  
@@ -46,6 +19,8 @@
                           'email'     =>     $_POST["email"],  
                           'password'     =>     $_POST["password"]  
                      )  
+
+                
                 );  
                 $count = $statement->rowCount();  
                 if($count > 0)  
