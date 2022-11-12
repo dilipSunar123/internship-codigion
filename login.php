@@ -18,9 +18,7 @@ include("db/connection.php");
         $stmt->fetch();
             if($id > 0)  
             {  
-                session_start();
-                $R['email'] = $_SESSION["email"] = $_POST["email"];  
-                $R['id'] = $id;
+                $R['email'] = $_POST["email"];  
                 $R['ERR'] = false;
                 $R['MSG'] = "Sussess";
                 goto END;
