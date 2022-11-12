@@ -1,38 +1,36 @@
-
- <?php  
- 
-    session_start();
-	include("db/connection.php");
-	
-      if(isset($_POST["login"]))  
-      {  
-           if(empty($_POST["email"]) || empty($_POST["password"]))  
-           {  
-                echo "All fields are required";  
-           }  
-           else  
-           {  
-                $query = "SELECT * FROM sign_up WHERE email = :email AND password = :password";  
-                $statement = $conn->prepare($query);  
-                $statement->execute(  
-                     array(  
-                          'email'     =>     $_POST["email"],  
-                          'password'     =>     $_POST["password"]  
-                     )  
-
-                
-                );  
-                $count = $statement->rowCount();  
-                if($count > 0)  
-                {  
-                     $_SESSION["email"] = $_POST["email"];  
-                     header("location:test.php");  
+<?php  
+include("db/connection.php");
+        if ($_POST['email'] == "") {
+            $R['ERR'] = true;
+            $R['MSG'] = "Incorrect Email.";
+            goto END;
+        }
+        if ($_POST['password'] == "") {
+            $R['ERR'] = true;
+            $R['MSG'] = "Incorrect Password.";
+            goto END;
+        }
+        $password = md5($_POST['password']);
+        $stmt = $conn->prepare("SELECT id,email,password,status FROM sign_up WHERE email = ? AND password = ? AND status='1'");  
+        $stmt->bind_param("ss", $_POST['email'], $password);
+        $stmt->execute(); 
+        echo $count;
+            if($count > 0)  
+            {  
+                session_start();
+                $R['email'] = $_SESSION["email"] = $_POST["email"];  
+                $R['ERR'] = false;
+                $R['MSG'] = "Sussess";
+                goto END;
                 }  
-                else  
-                {  
-                echo '<script>alert("Wrong Credentials")</script>';  
-                }  
-           }  
-      }  
-
- ?> 
+            else  
+            {  
+                $R['ERR'] = true;
+                $R['MSG']="Error";
+                goto END;
+            }  
+        END:
+		header("Content-Type: application/json");
+		echo json_encode($R);
+		return;
+ ?>

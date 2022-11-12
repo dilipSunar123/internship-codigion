@@ -1,5 +1,3 @@
-
-
 <?php
 		include("db/connection.php");
 		 
@@ -17,8 +15,9 @@
 		}
 	
 		// it will execute the query
-		$stmt = $conn->prepare("INSERT INTO sign_up (email, password, status) VALUES (?, ?, '1')");
-		$stmt->bind_param("ss", $_POST['email'], $_POST['password']);
+        $password=md5($_POST['password']);
+        $stmt = $conn->prepare("INSERT INTO sign_up (email, password, status) VALUES (?, ?, '1')");
+		$stmt->bind_param("ss", $_POST['email'], $password);
 		$sql_run=$stmt->execute();
 
 		if($sql_run)
@@ -35,7 +34,6 @@
 		}
 			  
 		END:
-    
 		header("Content-Type: application/json");
 		echo json_encode($R);
 		return;
